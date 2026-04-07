@@ -1,0 +1,407 @@
+/* =============================================================
+   Archivo  : frontend/css/style.css
+   Autor    : Alexis Noe Gonzales Perez
+   Proyecto : Calculadora Científica Web – Diseño estilo Casio
+   Desc.    : Hoja de estilos inspirada en la serie CASIO fx.
+              Cuerpo gris carbón metálico, franja naranja
+              característica, pantalla LCD verde. CSS Grid de
+              5 columnas. Primer proyecto Python del alumno.
+   ============================================================= */
+
+/* ── Reset básico: elimina márgenes y padding del browser ── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Fondo de página: degradado oscuro para resaltar la calc ── */
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;      /* Alinear arriba: permite scroll en pantallas pequeñas */
+  padding: 28px 12px;
+  background: linear-gradient(150deg, #0d1117 0%, #161b22 50%, #0d2035 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ── Centrador del contenido ── */
+.calc-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CUERPO DE LA CALCULADORA
+   Inspirado en el plástico gris carbón metálico de CASIO
+   ══════════════════════════════════════════════════════════ */
+.calc-body {
+  width: 320px;
+  background: #282828;           /* Gris carbón oscuro, como el plástico real */
+  border-radius: 12px 12px 20px 20px;
+  border: 2px solid #484848;
+  padding-bottom: 16px;
+  overflow: hidden;              /* La franja naranja respeta el border-radius */
+  /* Sombras acumuladas: profundidad real + borde brillante tenue */
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 2px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ══════════════════════════════════════════════════════════
+   FRANJA NARANJA SUPERIOR – Sello visual de CASIO
+   ══════════════════════════════════════════════════════════ */
+.casio-header {
+  background: linear-gradient(135deg, #c83a08 0%, #e05520 45%, #c83808 100%);
+  padding: 9px 14px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #8a2600;
+}
+
+/* Logotipo "CASIO" en blanco negrilla */
+.logo-text {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.22em;
+  font-family: 'Arial Black', Impact, Arial, sans-serif;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Subtítulo del modelo debajo del logo */
+.model-text {
+  display: block;
+  font-size: 0.57rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.07em;
+  margin-top: 1px;
+}
+
+/* Lado derecho: panel solar decorativo + texto VPAM */
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+/* Simulación gráfica del panel solar de CASIO */
+.solar-cell {
+  width: 56px;
+  height: 9px;
+  background: repeating-linear-gradient(
+    90deg,
+    #111100 0px, #111100 5px,
+    #2a2800 5px, #2a2800 7px
+  );
+  border: 1px solid #1a1800;
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+/* Texto pequeño "NATURAL-V.P.A.M." debajo del panel */
+.nat-vpam {
+  font-size: 0.44rem;
+  color: rgba(255, 255, 255, 0.52);
+  letter-spacing: 0.05em;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PANTALLA LCD – Verde característica de CASIO
+   ══════════════════════════════════════════════════════════ */
+
+/* Carcasa exterior del display: rebaje oscuro (efecto de receso) */
+.display-shell {
+  margin: 10px 12px 6px;
+  background: #1a1a1a;
+  border-radius: 7px;
+  padding: 3px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Pantalla LCD con el verde-amarillo típico de CASIO */
+.display {
+  background: #b2ca7c;            /* Verde LCD clásico */
+  border: 1px solid #8aaa48;
+  border-radius: 5px;
+  padding: 8px 10px 8px;
+  min-height: 120px;             /* Espacio para indicadores + expr + número + preview */
+  font-family: 'Lucida Console', 'Courier New', monospace;
+  /* Sombra interna que le da profundidad como una pantalla real */
+  box-shadow:
+    inset 0 1px 5px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Fila de pequeños indicadores en el borde superior del display */
+.display-indicators {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+/* Cada indicador (DEG, RAD, M) — pequeño texto oscuro sobre LCD */
+.ind {
+  font-size: 0.52rem;
+  color: #1a2e00;
+  font-weight: 700;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 1px 3px;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s;      /* Transición suave al cambiar modo DEG/RAD */
+}
+
+/* Por defecto RAD aparece apagado (modo DEG es el inicial) */
+#ind-rad  { opacity: 0.25; }
+#ind-m    { opacity: 0.25; }     /* M: invisible hasta usar memoria */
+
+/* "Natural" alineado a la derecha del display */
+.ind-label {
+  margin-left: auto;
+  font-size: 0.5rem;
+  color: #2a4400;
+  font-style: italic;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Expresión que el usuario va escribiendo (línea pequeña arriba) */
+#expression-display {
+  text-align: right;
+  font-size: 0.74rem;
+  color: #2c4200;
+  min-height: 1.15em;
+  word-break: break-all;
+  opacity: 0.8;
+  margin-bottom: 2px;
+}
+
+/* Número principal: resultado o entrada actual (grande) */
+#main-display {
+  text-align: right;
+  font-size: 2rem;
+  font-weight: 400;
+  color: #111e00;                 /* Casi negro con tinte verde oscuro */
+  word-break: break-all;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  min-height: 2.4rem;
+}
+
+/* Vista previa del resultado en tiempo real (debounce 400 ms) */
+#preview-display {
+  text-align: right;
+  font-size: 1rem;
+  color: #1a3000;            /* Verde oscuro sobre pantalla LCD */
+  font-weight: 600;
+  min-height: 1.25em;
+  margin-top: 4px;
+  letter-spacing: 0.03em;
+  font-family: 'Lucida Console', 'Courier New', monospace;
+  border-top: 1px solid rgba(0,0,0,0.15);
+  padding-top: 3px;
+  transition: opacity 0.25s;
+}
+
+/* Error: rojo oscuro cuando la operación no es válida */
+#error-display {
+  text-align: right;
+  font-size: 0.62rem;
+  color: #8a0000;
+  min-height: 0.85em;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin-top: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ÁREA DE BOTONES
+   ══════════════════════════════════════════════════════════ */
+
+/* Envuelve todas las filas — columna vertical con gap entre filas */
+.buttons-area {
+  padding: 6px 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Cada fila usa CSS Grid con 5 columnas iguales (como CASIO) */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+/* Línea divisoria entre sección científica y teclado numérico */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #505050, transparent);
+  margin: 1px 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BOTÓN BASE – Estilo físico 3D (sombra inferior = grosor)
+   ══════════════════════════════════════════════════════════ */
+.btn {
+  border: none;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  height: 38px;
+  position: relative;
+  outline: none;
+  /* La sombra inferior simula el grosor físico del botón */
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: filter 0.1s, transform 0.08s, box-shadow 0.08s;
+}
+
+/* Hover: se ilumina levemente */
+.btn:hover  { filter: brightness(1.18); }
+
+/* Click: el botón se hunde 2px como un botón físico real */
+.btn:active {
+  filter: brightness(0.82);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TIPOS DE BOTÓN — Colores por categoría (como en CASIO)
+   ══════════════════════════════════════════════════════════ */
+
+/* SHIFT — naranja brillante, botón especial de CASIO */
+.btn-shift {
+  background: linear-gradient(170deg, #e88000, #c86000);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  box-shadow: 0 3px 0 #7a3800, inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* ALPHA — azul oscuro, segundo modo especial */
+.btn-alpha {
+  background: linear-gradient(170deg, #2a3ea0, #1e2e80);
+  color: #b8d0ff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  box-shadow: 0 3px 0 #0e1850, inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* MODE — gris especial con texto dorado para indicar DEG/RAD */
+.btn-mode {
+  background: linear-gradient(170deg, #3c3c3c, #2a2a2a);
+  color: #f0c040;
+  font-size: 0.68rem;
+  font-weight: 700;
+  box-shadow: 0 3px 0 #111111, inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* DEL — tono cálido oscuro para borrar el último carácter */
+.btn-del {
+  background: linear-gradient(170deg, #4a3a18, #382a10);
+  color: #ffc870;
+  font-size: 0.8rem;
+  box-shadow: 0 3px 0 #201500, inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* AC — rojo: acción más destructiva (borra todo) */
+.btn-ac {
+  background: linear-gradient(170deg, #b82020, #881010);
+  color: #ffd8d8;
+  font-weight: 800;
+  box-shadow: 0 3px 0 #580000, inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.btn-ac:hover { background: linear-gradient(170deg, #cc2828, #a01818); }
+
+/* CE — naranja oscuro: borra solo la entrada actual */
+.btn-ce {
+  background: linear-gradient(170deg, #6a3a0a, #4e2a06);
+  color: #ffaa50;
+  box-shadow: 0 3px 0 #301600, inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Funciones científicas (x², √, %, inversas, |x|, n!) */
+.btn-sci {
+  background: linear-gradient(170deg, #363636, #282828);
+  color: #a8c8e8;
+  font-size: 0.67rem;
+  box-shadow: 0 3px 0 #141414, inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* Trigonométricas (sin, cos, tan, log, ln) — azul oscuro destacado */
+.btn-trig {
+  background: linear-gradient(170deg, #263a50, #1a2a3c);
+  color: #60c8ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: 0 3px 0 #081420, inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Paréntesis — tono azul-gris */
+.btn-paren {
+  background: linear-gradient(170deg, #2e3c48, #202c38);
+  color: #80c8ee;
+  box-shadow: 0 3px 0 #0c1820, inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ANS — verde suave, resalta como "botón de respuesta" */
+.btn-ans {
+  background: linear-gradient(170deg, #1c3c2a, #122a1c);
+  color: #60ee90;
+  font-weight: 700;
+  box-shadow: 0 3px 0 #001810, inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Memoria (MC, MR, M+, M-) — azul-morado oscuro */
+.btn-mem {
+  background: linear-gradient(170deg, #2a2a3e, #1c1c2e);
+  color: #80a0cc;
+  font-size: 0.65rem;
+  box-shadow: 0 3px 0 #0a0a18, inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* Números (0-9) — gris medio, texto blanco claro (como CASIO) */
+.btn-num {
+  background: linear-gradient(170deg, #525252, #3e3e3e);
+  color: #f2f2f2;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 3px 0 #1e1e1e, inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Operadores (÷ × + −) — naranja oscuro como CASIO */
+.btn-op {
+  background: linear-gradient(170deg, #c06018, #a04c0c);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 3px 0 #602a00, inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn-op:hover { background: linear-gradient(170deg, #d47020, #b85a10); }
+
+/* = (igual) — naranja vivo, botón principal de la calculadora */
+.btn-eq {
+  background: linear-gradient(170deg, #d86008, #b04808);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  box-shadow: 0 3px 0 #682000, inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.btn-eq:hover {
+  background: linear-gradient(170deg, #ec7010, #c85610);
+}
+
+/* El botón "0" ocupa 2 de las 5 columnas del grid */
+.btn-wide {
+  grid-column: span 2;
+}

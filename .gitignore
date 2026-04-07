@@ -1,0 +1,27 @@
+# ── Entorno virtual de Python (no subir al repositorio) ──────────
+.venv/
+venv/
+env/
+
+# ── Caché de Python (archivos compilados automáticamente) ─────────
+__pycache__/
+*.py[cod]
+*.pyo
+
+# ── Variables de entorno (contiene datos sensibles) ───────────────
+.env
+
+# ── Editor VS Code ────────────────────────────────────────────────
+.vscode/
+
+# ── Sistema operativo Windows ─────────────────────────────────────
+Thumbs.db
+desktop.ini
+
+# ── Sistema operativo macOS ───────────────────────────────────────
+.DS_Store
+
+# ── Pytest: resultados y caché de pruebas ─────────────────────────
+.pytest_cache/
+htmlcov/
+.coverage

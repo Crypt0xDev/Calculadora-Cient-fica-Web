@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Científica</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <div class="calc-wrapper">
+    <div class="calc-body">
+
+      <!-- ─── Franja naranja superior estilo CASIO ─── -->
+      <div class="casio-header">
+        <div class="header-brand">
+          <span class="logo-text">CASIO</span>
+          <span class="model-text">fx-Scientific Web</span>
+        </div>
+        <div class="header-right">
+          <div class="solar-cell"></div>
+          <span class="nat-vpam">NATURAL-V.P.A.M.</span>
+        </div>
+      </div>
+
+      <!-- ─── Pantalla LCD estilo CASIO ─── -->
+      <div class="display-shell">
+        <div class="display">
+          <!-- Indicadores de modo DEG/RAD y memoria (esquina sup. izquierda) -->
+          <div class="display-indicators">
+            <span class="ind" id="ind-deg">DEG</span>
+            <span class="ind" id="ind-rad">RAD</span>
+            <span class="ind" id="ind-m">M</span>
+            <span class="ind-label">Natural</span>
+          </div>
+          <!-- Expresión en construcción (línea pequeña) -->
+          <div id="expression-display"></div>
+          <!-- Número principal: entrada actual o resultado -->
+          <div id="main-display">0</div>
+          <!-- Vista previa del resultado mientras se escribe (sin presionar =) -->
+          <div id="preview-display"></div>
+          <!-- Mensajes de error en rojo -->
+          <div id="error-display"></div>
+        </div>
+      </div>
+
+      <!-- ─── Área de botones (5 columnas estilo Casio fx) ─── -->
+      <div class="buttons-area">
+
+        <!-- ROW 1: SHIFT · ALPHA · MODE/DEG · DEL · AC -->
+        <div class="btn-grid">
+          <button class="btn btn-shift">SHIFT</button>
+          <button class="btn btn-alpha">ALPHA</button>
+          <button class="btn btn-mode" id="btn-mode" onclick="toggleMode()">MODE</button>
+          <button class="btn btn-del"  onclick="backspace()">&#9003;</button>
+          <button class="btn btn-ac"   onclick="allClear()">AC</button>
+        </div>
+
+        <!-- ROW 2: x⁻¹ · x² · √x · x^y · % -->
+        <div class="btn-grid">
+          <button class="btn btn-sci" onclick="insertFn('^(-1)')">x⁻¹</button>
+          <button class="btn btn-sci" onclick="insertFn('^2')">x²</button>
+          <button class="btn btn-sci" onclick="insertFn('sqrt(')">√x</button>
+          <button class="btn btn-sci" onclick="insertFn('^')">x^y</button>
+          <button class="btn btn-sci" onclick="percent()">%</button>
+        </div>
+
+        <!-- ROW 3: sin · cos · tan · log · ln -->
+        <div class="btn-grid">
+          <button class="btn btn-trig" onclick="insertFn('sin(')">sin</button>
+          <button class="btn btn-trig" onclick="insertFn('cos(')">cos</button>
+          <button class="btn btn-trig" onclick="insertFn('tan(')">tan</button>
+          <button class="btn btn-trig" onclick="insertFn('log(')">log</button>
+          <button class="btn btn-trig" onclick="insertFn('ln(')">ln</button>
+        </div>
+
+        <!-- ROW 4: sin⁻¹ · cos⁻¹ · tan⁻¹ · eˣ · π -->
+        <div class="btn-grid">
+          <button class="btn btn-sci" onclick="insertFn('asin(')">sin⁻¹</button>
+          <button class="btn btn-sci" onclick="insertFn('acos(')">cos⁻¹</button>
+          <button class="btn btn-sci" onclick="insertFn('atan(')">tan⁻¹</button>
+          <button class="btn btn-sci" onclick="insertFn('exp(')">eˣ</button>
+          <button class="btn btn-sci" onclick="insertPi()">π</button>
+        </div>
+
+        <!-- ROW 5: ( · ) · |x| · n! · Ans -->
+        <div class="btn-grid">
+          <button class="btn btn-paren" onclick="insertTxt('(')">(</button>
+          <button class="btn btn-paren" onclick="insertTxt(')')">)</button>
+          <button class="btn btn-sci"   onclick="insertFn('abs(')">|x|</button>
+          <button class="btn btn-sci"   onclick="insertFn('factorial(')">n!</button>
+          <button class="btn btn-ans"   onclick="insertFn('ans')">Ans</button>
+        </div>
+
+        <!-- ROW 6: MC · MR · M+ · M- · +/- -->
+        <div class="btn-grid">
+          <button class="btn btn-mem" onclick="memoryClear()">MC</button>
+          <button class="btn btn-mem" onclick="memoryRecall()">MR</button>
+          <button class="btn btn-mem" onclick="memoryAdd()">M+</button>
+          <button class="btn btn-mem" onclick="memorySubtract()">M-</button>
+          <button class="btn btn-sci" onclick="toggleSign()">+/-</button>
+        </div>
+
+        <!-- Línea divisoria entre zona científica y teclado numérico -->
+        <div class="divider"></div>
+
+        <!-- ROW 7: 7 · 8 · 9 · ÷ · × -->
+        <div class="btn-grid">
+          <button class="btn btn-num" onclick="insertTxt('7')">7</button>
+          <button class="btn btn-num" onclick="insertTxt('8')">8</button>
+          <button class="btn btn-num" onclick="insertTxt('9')">9</button>
+          <button class="btn btn-op"  onclick="insertTxt('÷')">÷</button>
+          <button class="btn btn-op"  onclick="insertTxt('×')">×</button>
+        </div>
+
+        <!-- ROW 8: 4 · 5 · 6 · + · − -->
+        <div class="btn-grid">
+          <button class="btn btn-num" onclick="insertTxt('4')">4</button>
+          <button class="btn btn-num" onclick="insertTxt('5')">5</button>
+          <button class="btn btn-num" onclick="insertTxt('6')">6</button>
+          <button class="btn btn-op"  onclick="insertTxt('+')">+</button>
+          <button class="btn btn-op"  onclick="insertTxt('−')">−</button>
+        </div>
+
+        <!-- ROW 9: 1 · 2 · 3 · e · 10ˣ -->
+        <div class="btn-grid">
+          <button class="btn btn-num" onclick="insertTxt('1')">1</button>
+          <button class="btn btn-num" onclick="insertTxt('2')">2</button>
+          <button class="btn btn-num" onclick="insertTxt('3')">3</button>
+          <button class="btn btn-sci" onclick="insertTxt('e')">e</button>
+          <button class="btn btn-sci" onclick="insertFn('10^')">10ˣ</button>
+        </div>
+
+        <!-- ROW 10: 0(span 2) · . · CE · = -->
+        <div class="btn-grid">
+          <button class="btn btn-num btn-wide" onclick="insertTxt('0')">0</button>
+          <button class="btn btn-num" onclick="insertTxt('.')">.</button>
+          <button class="btn btn-ce"  onclick="clearEntry()">CE</button>
+          <button class="btn btn-eq"  onclick="pressEquals()">=</button>
+        </div>
+
+      </div><!-- /buttons-area -->
+    </div><!-- /calc-body -->
+  </div><!-- /calc-wrapper -->
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
