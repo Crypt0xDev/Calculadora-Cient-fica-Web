@@ -16,7 +16,8 @@ from dotenv import load_dotenv  # Lee las variables del archivo .env
 load_dotenv()
 
 # Leer HOST y PORT desde .env; si no existen, usar valores por defecto
-HOST = os.getenv("HOST", "127.0.0.1")
+# En producción (Railway/Render) HOST debe ser 0.0.0.0 para aceptar conexiones externas
+HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8000"))
 
 if __name__ == "__main__":
@@ -24,5 +25,5 @@ if __name__ == "__main__":
         "backend.main:app",
         host=HOST,
         port=PORT,
-        reload=True,
+        reload=False,
     )
