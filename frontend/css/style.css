@@ -184,6 +184,23 @@ body {
   margin-bottom: 2px;
 }
 
+/* Superíndices en los displays — exponentes estilo Casio fx */
+#expression-display sup,
+#main-display sup {
+  font-size: 0.58em;
+  vertical-align: 0.45em;
+  line-height: 0;
+}
+
+/* Cursor parpadeante cuando el usuario está a punto de escribir el exponente */
+.exp-cursor {
+  animation: blink-cursor 0.75s step-end infinite;
+}
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
 /* Número principal: resultado o entrada actual (grande) */
 #main-display {
   text-align: right;

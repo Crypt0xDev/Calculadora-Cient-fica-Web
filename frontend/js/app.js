@@ -79,15 +79,38 @@ async function computePreview() {
 // ── FUNCIONES DE PANTALLA ────────────────────────────────────────
 
 /**
+ * Convierte la expresión interna (con ^) a HTML con superíndice.
+ * Ejemplo: "2^10" → "2<sup>10</sup>"   |   "(5)^(-1)" → "(5)<sup>(-1)</sup>"
+ * Escapa HTML antes de aplicar las sustituciones para evitar XSS.
+ */
+function renderExpr(str) {
+  if (!str) return '';
+  let s = str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  // ^(contenido)  →  <sup>(contenido)</sup>   ej: ^(-1), ^(2)
+  s = s.replace(/\^\(([^)]*)\)/g, '<sup>($1)</sup>');
+  // ^número        →  <sup>número</sup>         ej: ^2, ^10, ^0.5
+  s = s.replace(/\^(-?[\d.]+)/g, '<sup>$1</sup>');
+  // ^palabra       →  <sup>palabra</sup>         ej: ^pi, ^e
+  s = s.replace(/\^([a-zA-Zπ]+)/g, '<sup>$1</sup>');
+  // ^ suelto al final: el usuario acaba de pulsar x^y y va a escribir el exponente
+  s = s.replace(/\^$/, '<sup class="exp-cursor">_</sup>');
+  return s;
+}
+
+/**
  * Actualiza los tres elementos del display:
  * - expression-display: la expresión que el usuario está escribiendo
  * - main-display: el valor principal (el que se ve grande)
  * - error-display: mensajes de error (vacío cuando todo está bien)
  */
 function updateDisplay(val) {
-  // Si se pasa un valor explícito, mostrarlo; si no, mostrar la expresión o "0"
-  document.getElementById('main-display').textContent = val || expr || '0';
-  document.getElementById('expression-display').textContent = expr;
+  const mainVal = val || expr || '0';
+  // Usar innerHTML para que los <sup> de renderExpr se interpreten como HTML
+  document.getElementById('main-display').innerHTML = renderExpr(mainVal);
+  document.getElementById('expression-display').innerHTML = renderExpr(expr);
   document.getElementById('error-display').textContent = '';  // Limpiar errores anteriores
 }
 
@@ -311,7 +334,7 @@ async function pressEquals() {
     // Paso 5: mostrar el resultado en pantalla
     ans    = data.resultado;   // Guardar en ANS para reutilizar
     result = data.resultado;   // Guardar como último resultado
-    document.getElementById('expression-display').textContent = expr + ' =';  // Mostrar "expr ="
+    document.getElementById('expression-display').innerHTML = renderExpr(expr) + ' =';  // Mostrar "expr ="
     document.getElementById('main-display').textContent = result;
     document.getElementById('error-display').textContent = '';
     expr = result;    // La expresión pasa a ser el resultado (para encadenar)
