@@ -2,7 +2,13 @@
 
 # 🧮 Calculadora Científica Web
 
-### Aplicación de calculadora científica estilo CASIO fx con backend en Python
+**Calculadora científica de escritorio estilo CASIO fx — construida con Python + FastAPI y desplegada en Vercel.**
+
+<br/>
+
+[![Demo en vivo](https://img.shields.io/badge/▶%20Demo%20en%20vivo-calculadora--casio.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://calculadora-casio.vercel.app/)
+
+<br/>
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.135-009688?style=flat-square&logo=fastapi&logoColor=white)
@@ -10,223 +16,199 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
-
-[![Demo en vivo](https://img.shields.io/badge/Demo-calculadora--casio.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://calculadora-casio.vercel.app/)
-[![Repositorio](https://img.shields.io/badge/GitHub-Calculadora--Cient--fica--Web-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web)
+&nbsp;
 [![CI](https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web/actions/workflows/ci.yml/badge.svg)](https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+<br/>
+
+[📁 Estructura](docs/ESTRUCTURA.md) &nbsp;·&nbsp;
+[🤝 Contribuir](docs/CONTRIBUTING.md) &nbsp;·&nbsp;
+[🔒 Seguridad](docs/SECURITY.md) &nbsp;·&nbsp;
+[🐛 Reportar un bug](https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web/issues/new)
 
 </div>
 
 ---
 
-## Descripción
+## ¿Qué es?
 
-Calculadora científica completa que funciona íntegramente en el navegador. El usuario escribe expresiones matemáticas en la interfaz gráfica y el backend (Python + FastAPI) las evalúa de forma **segura** devolviendo el resultado en JSON.
+Calculadora científica completa que corre en el navegador. El usuario escribe expresiones matemáticas en la interfaz y el backend en **Python + FastAPI** las evalúa de forma segura, devolviendo el resultado como JSON.
 
-El diseño visual replica fielmente la serie **CASIO fx**: franja naranja superior, pantalla LCD con tono verde, botones con efecto 3D y distribución en 5 columnas. Soporta notación científica, memoria, ángulos en DEG/RAD y vista previa del resultado en tiempo real.
-
----
-
-## Funciones disponibles
-
-| Categoría | Operaciones disponibles |
-|:---|:---|
-| **Aritmética básica** | `+` `−` `×` `÷` `%` |
-| **Potencias y raíces** | `x²` `x^y` `x⁻¹` `10ˣ` `√x` |
-| **Trigonométricas** | `sin` `cos` `tan` — en **DEG** o **RAD** |
-| **Trigonométricas inversas** | `sin⁻¹` `cos⁻¹` `tan⁻¹` |
-| **Logaritmos** | `log₁₀` `ln` `eˣ` |
-| **Otras funciones** | `|x|` `n!` `π` `e` `Ans` `+/-` `CE` |
-| **Memoria** | `M+` `M−` `MR` `MC` |
+> Diseño visual replica la serie **CASIO fx**: franja naranja, pantalla LCD verde, botones con relieve 3D y distribución en 5 columnas. Incluye vista previa del resultado en tiempo real mientras se escribe.
 
 ---
 
-## Arquitectura del sistema
+## ✨ Funciones
+
+<table>
+<tr>
+<td>
+
+**Aritmética**
+- Suma, resta, multiplicación, división
+- Módulo `%`
+- Cambio de signo `+/-`
+
+**Potencias y raíces**
+- `x²` `x^y` `x⁻¹`
+- `√x` `10ˣ`
+
+**Memoria**
+- `M+` `M−` `MR` `MC`
+
+</td>
+<td>
+
+**Trigonometría**
+- `sin` `cos` `tan`
+- `sin⁻¹` `cos⁻¹` `tan⁻¹`
+- Modo **DEG** y **RAD**
+
+**Logaritmos y exponencial**
+- `log₁₀` `ln` `eˣ`
+
+**Otras**
+- `|x|` `n!` `π` `e` `Ans` `CE`
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗️ Arquitectura
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                        NAVEGADOR                            │
-│   index.html  ──►  style.css                                │
-│        │                                                    │
-│      app.js  ──── fetch() POST ──────────────────────────┐  │
-└──────────────────────────────────────────────────────────┼──┘
-                                                           │
-                               HTTP / JSON                 ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      SERVIDOR FastAPI                       │
-│                                                             │
-│  backend/main.py                                            │
-│       │                                                     │
-│       ├── /api/calcular/expresion ──► routers/calculadora   │
-│       │                                      │              │
-│       │                              schemas/operacion.py   │
-│       │                              (validación Pydantic)  │
-│       │                                      │              │
-│       │                              services/operaciones   │
-│       │                              (eval() seguro)        │
-│       │                                      │              │
-│       └── /static/** ──► frontend/            └── resultado │
-└─────────────────────────────────────────────────────────────┘
+Navegador
+├── index.html  →  style.css   (interfaz CASIO fx)
+└── app.js      →  fetch() POST /api/calcular/expresion
+                        │
+                        ▼  HTTP / JSON
+               Servidor FastAPI
+               ├── routers/calculadora.py   (endpoints)
+               ├── schemas/operacion.py     (validación Pydantic)
+               └── services/operaciones.py  (eval() seguro)
 ```
 
 ---
 
-## Instalación y puesta en marcha
+## 🚀 Inicio rápido
 
-### Requisitos previos
-
-- Python **3.11** o superior
-- `pip` actualizado
-
-### 1. Clonar el repositorio y crear el entorno virtual
-
+**1. Clonar e instalar**
 ```bash
-git clone <url-del-repositorio>
-cd Calculadora
-
+git clone https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web.git
+cd Calculadora-Cient-fica-Web
 python -m venv .venv
 ```
 
-### 2. Activar el entorno virtual
-
+**2. Activar entorno virtual**
 ```bash
-# Windows — PowerShell
+# PowerShell
 .venv\Scripts\Activate.ps1
 
-# Windows — CMD
+# CMD
 .venv\Scripts\activate.bat
 
-# Windows — Git Bash
+# Git Bash
 source .venv/Scripts/activate
 ```
 
-### 3. Instalar dependencias
-
+**3. Instalar dependencias y ejecutar**
 ```bash
 pip install -r backend/requirements.txt
-```
-
-### 4. Ejecutar el servidor
-
-```bash
 python main.py
 ```
 
-### 5. Abrir en el navegador
-
+**4. Abrir en el navegador**
 ```
 http://localhost:8000
 ```
 
-> La documentación interactiva de la API está disponible en `http://localhost:8000/docs`
+> 📖 Documentación interactiva de la API: `http://localhost:8000/docs`
 
 ---
 
-## Referencia de la API REST
+## 🔌 API REST
 
-### `POST /api/calcular/expresion`
+<details>
+<summary><b>POST /api/calcular/expresion</b> — Evalúa una expresión científica completa</summary>
 
-Endpoint principal. Evalúa cualquier expresión matemática científica.
+```jsonc
+// Petición
+{ "expresion": "sin(30) + sqrt(16)" }
 
-**Petición**
-```json
-{
-  "expresion": "sin(30) + sqrt(16)"
-}
+// Respuesta 200 OK
+{ "resultado": "4.5", "expresion": "sin(30) + sqrt(16)" }
+
+// Respuesta 400 Bad Request
+{ "detail": "Expresión contiene caracteres no permitidos" }
+```
+</details>
+
+<details>
+<summary><b>POST /api/calcular/</b> — Operación básica entre dos números</summary>
+
+```jsonc
+// Petición
+{ "numero1": 10, "numero2": 3, "operacion": "dividir" }
+
+// Respuesta 200 OK
+{ "resultado": 3.3333333333333335, "operacion": "dividir" }
 ```
 
-**Respuesta exitosa** `200 OK`
-```json
-{
-  "resultado": "4.5",
-  "expresion": "sin(30) + sqrt(16)"
-}
-```
-
-**Respuesta de error** `400 Bad Request`
-```json
-{
-  "detail": "Expresión contiene caracteres no permitidos"
-}
-```
+Operaciones válidas: `sumar` · `restar` · `multiplicar` · `dividir`
+</details>
 
 ---
 
-### `POST /api/calcular/`
+## 🔐 Seguridad del `eval()`
 
-Endpoint para operaciones básicas entre dos números.
+El `eval()` corre en un entorno completamente aislado con **4 capas de protección**:
 
-**Petición**
-```json
-{
-  "numero1": 10,
-  "numero2": 3,
-  "operacion": "dividir"
-}
-```
-
-**Respuesta exitosa** `200 OK`
-```json
-{
-  "resultado": 3.3333333333333335,
-  "operacion": "dividir"
-}
-```
-
-> Operaciones válidas: `sumar`, `restar`, `multiplicar`, `dividir`
-
----
-
-## Seguridad del `eval()`
-
-El backend evalúa expresiones con `eval()` dentro de un entorno completamente aislado mediante **cuatro capas de protección**:
-
-| Capa | Mecanismo | Descripción |
+| # | Capa | Qué hace |
 |:---:|:---|:---|
-| 1 | **Whitelist de funciones** | Solo `sin`, `cos`, `sqrt`, `factorial`, `log`, etc. están permitidas. Ninguna otra función de Python es accesible. |
-| 2 | **Regex de caracteres** | Se rechaza cualquier expresión que contenga caracteres fuera del conjunto matemático permitido. |
-| 3 | **Blacklist de palabras** | Se bloquean tokens peligrosos: `__`, `import`, `exec`, `eval`, `open`, `os`, `sys`, `globals`, etc. |
-| 4 | **`__builtins__` deshabilitados** | El entorno de `eval()` no tiene acceso a las funciones internas de Python. |
+| 1 | **Whitelist de funciones** | Solo `sin`, `cos`, `sqrt`, `factorial`, `log`... son accesibles. |
+| 2 | **Regex de caracteres** | Rechaza todo lo que no sea un carácter matemático válido. |
+| 3 | **Blacklist de palabras** | Bloquea `__`, `import`, `exec`, `os`, `sys`, `globals`... |
+| 4 | **`__builtins__` = `{}`** | El entorno no tiene acceso a las funciones internas de Python. |
 
 ---
 
-## Dependencias
-
-| Librería | Versión | Descripción |
-|:---|:---:|:---|
-| `fastapi` | 0.135.3 | Framework web asíncrono para construir la API REST |
-| `uvicorn[standard]` | 0.44.0 | Servidor ASGI de alto rendimiento para ejecutar FastAPI |
-| `pydantic` | 2.12.5 | Validación y serialización automática de datos |
-| `python-dotenv` | 1.2.2 | Lectura de variables de entorno desde `.env` |
-| `pytest` | ≥ 9.0.0 | Framework para ejecutar las pruebas unitarias |
-
----
-
-## Pruebas
-
-> Las pruebas unitarias aún no están implementadas. La carpeta `tests/` no existe en el repositorio.
-> Para crear y ejecutar pruebas en el futuro:
+## 🧪 Tests
 
 ```bash
-mkdir tests
-pytest tests/ -v
+python -m pytest tests/ -v
 ```
+
+18 tests que cubren aritmética, funciones científicas, seguridad del `eval()` y manejo de errores.
 
 ---
 
-## Variables de entorno
+## ⚙️ Variables de entorno
 
-Crea un archivo `.env` en la raíz del proyecto para configurar el servidor:
+Crea un archivo `.env` en la raíz (opcional):
 
 ```ini
-# .env
-HOST=127.0.0.1
+HOST=127.0.0.1   # 0.0.0.0 en producción
 PORT=8000
 ```
 
-Si el archivo no existe, el servidor usará los valores por defecto (`127.0.0.1:8000`).
+---
+
+## 📦 Dependencias
+
+| Librería | Versión |
+|:---|:---:|
+| `fastapi` | 0.135.3 |
+| `uvicorn[standard]` | 0.44.0 |
+| `pydantic` | 2.12.5 |
+| `python-dotenv` | 1.2.2 |
 
 ---
+
+## 📄 Licencia
+
+Distribuido bajo la licencia [MIT](LICENSE). &copy; 2026 Alexis Noe Gonzales Perez.
 
 

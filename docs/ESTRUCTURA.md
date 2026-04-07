@@ -53,7 +53,7 @@ Calculadora/
 | Archivo | Responsabilidad |
 |:---|:---|
 | `main.py` | Inicializa FastAPI, registra routers y sirve el frontend como archivos estáticos bajo `/static`. |
-| `requirements.txt` | Lista de dependencias Python: FastAPI, Uvicorn, Pydantic, python-dotenv, pytest. |
+| `requirements.txt` | Lista de dependencias Python: FastAPI, Uvicorn, Pydantic, python-dotenv. |
 
 #### `routers/calculadora.py`
 Define los dos endpoints de la API:
