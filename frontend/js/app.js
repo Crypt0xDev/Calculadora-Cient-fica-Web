@@ -30,6 +30,18 @@ const DISPLAY_TO_API = { '×': '*', '÷': '/', '−': '-', 'π': 'pi', 'e': 'e' 
 let previewTimer = null;
 
 /**
+ * Auto-cierra los paréntesis abiertos que le faltan su cierre.
+ * Ej: "sin(30+sqrt(4" → "sin(30+sqrt(4))"  |  "acos(0.5" → "acos(0.5)"
+ * Esto permite obtener preview y resultado aunque el usuario no haya
+ * cerrado todos los paréntesis antes de pulsar =.
+ */
+function autoClose(s) {
+  const open  = (s.match(/\(/g) || []).length;
+  const close = (s.match(/\)/g) || []).length;
+  return s + ')'.repeat(Math.max(0, open - close));
+}
+
+/**
  * Calcula el resultado de la expresión actual y lo muestra en #preview-display.
  * Se llama automáticamente tras cada pulsación de tecla.
  * No modifica nada si la expresión está vacía o termina con un operador.
@@ -51,12 +63,16 @@ async function computePreview() {
   previewTimer = setTimeout(async () => {
     try {
       // Convertir símbolos visuales al formato que entiende Python
-      let apiExpr = expr;
+      // autoClose() cierra paréntesis abiertos para obtener preview
+      let apiExpr = autoClose(expr);
       for (const [sym, rep] of Object.entries(DISPLAY_TO_API)) {
         apiExpr = apiExpr.split(sym).join(rep);
       }
       if (isDeg) {
+        // Trig directa: sin/cos/tan → sind/cosd/tand (input en grados)
         apiExpr = apiExpr.replace(/\b(sin|cos|tan)\(/g, '$1d(');
+        // Trig inversa: asin/acos/atan → asind/acosd/atand (output en grados)
+        apiExpr = apiExpr.replace(/\b(asin|acos|atan)\(/g, '$1d(');
       }
       const res = await fetch('/api/calcular/expresion', {
         method: 'POST',
@@ -300,17 +316,23 @@ function toggleMode() {
 async function pressEquals() {
   if (!expr.trim()) return;  // No hacer nada si la expresión está vacía
 
-  // Paso 1: convertir símbolos visuales a operadores de Python
+  // Paso 1: auto-cerrar paréntesis abiertos antes de enviar
+  // Ej: "acos(0.5" → "acos(0.5)"  |  "sin(30+sqrt(4" → "sin(30+sqrt(4))"
+  const closedExpr = autoClose(expr);
+
+  // Paso 2: convertir símbolos visuales a operadores de Python
   // Ejemplo: "3×4÷2" → "3*4/2"
-  let apiExpr = expr;
+  let apiExpr = closedExpr;
   for (const [sym, rep] of Object.entries(DISPLAY_TO_API)) {
     apiExpr = apiExpr.split(sym).join(rep);
   }
 
-  // Paso 2: si estamos en modo grados, avisar al backend
-  // El backend convierte sind(30) → sin(math.radians(30))
+  // Paso 3: si estamos en modo grados, avisar al backend
   if (isDeg) {
+    // Trig directa: sin(55) → sind(55) — backend convierte a math.radians
     apiExpr = apiExpr.replace(/\b(sin|cos|tan)\(/g, '$1d(');
+    // Trig inversa: acos(0.5) → acosd(0.5) — backend devuelve grados
+    apiExpr = apiExpr.replace(/\b(asin|acos|atan)\(/g, '$1d(');
   }
 
   try {
@@ -331,10 +353,11 @@ async function pressEquals() {
       return;
     }
 
-    // Paso 5: mostrar el resultado en pantalla
+    // Paso 6: mostrar el resultado en pantalla
     ans    = data.resultado;   // Guardar en ANS para reutilizar
     result = data.resultado;   // Guardar como último resultado
-    document.getElementById('expression-display').innerHTML = renderExpr(expr) + ' =';  // Mostrar "expr ="
+    // Mostrar la expresión auto-cerrada para que el usuario vea lo que se evaluó
+    document.getElementById('expression-display').innerHTML = renderExpr(closedExpr) + ' =';
     document.getElementById('main-display').textContent = result;
     document.getElementById('error-display').textContent = '';
     expr = result;    // La expresión pasa a ser el resultado (para encadenar)

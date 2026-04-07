@@ -86,6 +86,34 @@ class TestTrigonometriaRAD:
         assert evaluar_expresion("atan(1)") == "0.7853981634"
 
 
+class TestInversaTrigDEG:
+    """El frontend envía asind/acosd/atand en modo DEG; el resultado debe estar en grados."""
+
+    def test_acosd_05(self):
+        assert evaluar_expresion("acosd(0.5)") == "60"
+
+    def test_asind_05(self):
+        assert evaluar_expresion("asind(0.5)") == "30"
+
+    def test_atand_1(self):
+        assert evaluar_expresion("atand(1)") == "45"
+
+    def test_acosd_1(self):
+        assert evaluar_expresion("acosd(1)") == "0"
+
+    def test_acosd_0(self):
+        assert evaluar_expresion("acosd(0)") == "90"
+
+    def test_asind_1(self):
+        assert evaluar_expresion("asind(1)") == "90"
+
+    def test_acosd_fuera_de_dominio(self):
+        """acosd(55) debe fallar con 400 — fuera del dominio [-1, 1]."""
+        with pytest.raises(HTTPException) as exc:
+            evaluar_expresion("acosd(55)")
+        assert exc.value.status_code == 400
+
+
 class TestLogaritmos:
     def test_log_100(self):
         assert evaluar_expresion("log(100)") == "2"

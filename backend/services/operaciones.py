@@ -25,6 +25,10 @@ FUNCIONES_PERMITIDAS = {
     "asin": math.asin,
     "acos": math.acos,
     "atan": math.atan,
+    # Inverse trig en grados (modo DEG): devuelven el ángulo en grados
+    "asind": lambda x: math.degrees(math.asin(x)),
+    "acosd": lambda x: math.degrees(math.acos(x)),
+    "atand": lambda x: math.degrees(math.atan(x)),
     # Hiperbólicas
     "sinh": math.sinh,
     "cosh": math.cosh,
