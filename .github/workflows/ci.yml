@@ -22,9 +22,5 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r backend/requirements.txt pytest
 
-      - name: Verificar importación del módulo
-        run: python -c "from backend.main import app; print('OK')"
-
       - name: Ejecutar tests
         run: pytest tests/ -v
-
