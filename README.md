@@ -13,6 +13,8 @@
 
 [![Demo en vivo](https://img.shields.io/badge/Demo-calculadora--casio.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://calculadora-casio.vercel.app/)
 [![Repositorio](https://img.shields.io/badge/GitHub-Calculadora--Cient--fica--Web-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web)
+[![CI](https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web/actions/workflows/ci.yml/badge.svg)](https://github.com/Crypt0xDev/Calculadora-Cient-fica-Web/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 </div>
 
