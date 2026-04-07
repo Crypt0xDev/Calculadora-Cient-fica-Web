@@ -70,6 +70,8 @@ def evaluar_expresion(expresion: str) -> str:
 
     # Paso 3: bloquear palabras que podrían ejecutar código peligroso
     # Ejemplo: alguien podría escribir "__import__('os').system('rm -rf /')"
+    # Usamos lookbehind/lookahead para palabras alfabéticas, evitando falsos
+    # positivos como "os" dentro de "cos" o "acos".
     palabras_prohibidas = [
         "__", "import", "exec", "eval", "open", "os", "sys",
         "compile", "globals", "locals", "getattr", "setattr",
@@ -77,18 +79,24 @@ def evaluar_expresion(expresion: str) -> str:
     ]
     expr_lower = expresion.lower()
     for palabra in palabras_prohibidas:
-        if palabra in expr_lower:
-            raise HTTPException(status_code=400, detail="Expresión no permitida")
+        if palabra.replace("_", "").isalpha():
+            # Búsqueda de palabra completa: "os" no debe coincidir dentro de "cos"
+            if re.search(r'(?<![a-zA-Z])' + re.escape(palabra) + r'(?![a-zA-Z])', expr_lower):
+                raise HTTPException(status_code=400, detail="Expresión no permitida")
+        else:
+            # Subcadena exacta para tokens especiales como "__"
+            if palabra in expr_lower:
+                raise HTTPException(status_code=400, detail="Expresión no permitida")
 
     # Paso 4a: convertir ^ (potencia matemática) a ** (potencia en Python)
     expresion = expresion.replace('^', '**')
 
     # Paso 4b: convertir funciones en grados (sind, cosd, tand) a radianes
-    # El frontend manda "sind(" cuando el modo es DEG, y aquí lo convertimos
+    # El frontend manda "sind(30)" cuando el modo es DEG, y aquí lo convertimos
     # Ejemplo: sind(30) → sin(math.radians(30))
     expresion = re.sub(
-        r'\b(sin|cos|tan)d\(',
-        lambda m: f"{m.group(1)}(math.radians(",
+        r'\b(sin|cos|tan)d\(([^)]+)\)',
+        lambda m: f"{m.group(1)}(math.radians({m.group(2)}))",
         expresion
     )
 
